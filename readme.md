@@ -27,6 +27,8 @@ Transpiling? Not sure yet. It would mean ES7 features!
 - No semi-colons
 - Lambdas
 - Functional (Or at least some facets of functional programming)
+- ES2015 as much as possible (or as much as Node and the latest browsers will support)
+- Favour `const` over `let` and more so over `var`
 
 ### Incremental
 
