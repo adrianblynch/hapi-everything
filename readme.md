@@ -29,6 +29,9 @@ Transpiling? Not sure yet. It would mean ES7 features!
 - Functional (Or at least some facets of functional programming)
 - ES2015 as much as possible (or as much as Node and the latest browsers will support)
 - Favour `const` over `let` and more so over `var`
+- Tabs over spaces!
+- Comment liberally - Why? - Because this is a learning experience and the more explanations alongside the code the better - Maybe
+- Code that acts as its own comment: http://blog.codinghorror.com/coding-without-comments/ - Namely descriptive names for functions and variables
 
 ### Incremental
 
