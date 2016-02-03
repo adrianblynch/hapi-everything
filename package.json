@@ -1,0 +1,25 @@
+{
+  "name": "hapi-everything",
+  "version": "0.0.1",
+  "description": "Multiple frontends alongside a Hapi server",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrianblynch/hapi-everything.git"
+  },
+  "keywords": [
+    "Hapi",
+    "Backbone",
+    "Marionette",
+    "Rivets"
+  ],
+  "author": "Adrian Lynch (adi_ady_ade@hotmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adrianblynch/hapi-everything/issues"
+  },
+  "homepage": "https://github.com/adrianblynch/hapi-everything#readme"
+}
