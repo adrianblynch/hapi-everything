@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/adrianblynch/hapi-everything/issues"
   },
-  "homepage": "https://github.com/adrianblynch/hapi-everything#readme"
+  "homepage": "https://github.com/adrianblynch/hapi-everything#readme",
+  "dependencies": {
+    "hapi": "^12.1.0"
+  }
 }
