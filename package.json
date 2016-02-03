@@ -23,6 +23,9 @@
   },
   "homepage": "https://github.com/adrianblynch/hapi-everything#readme",
   "dependencies": {
-    "hapi": "^12.1.0"
+    "hapi": "^12.1.0",
+    "hapi-swagger": "^4.0.0",
+    "inert": "^3.2.0",
+    "vision": "^4.0.1"
   }
 }
