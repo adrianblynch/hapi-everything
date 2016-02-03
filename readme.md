@@ -15,3 +15,21 @@ It's easy to create a Hapi server with basic routes, better still is to pull fun
 ### Frontends
 
 Create the same application in multiple libaries/frameworks to compare them.
+
+### Modern
+
+I'll aim to use modern techniques as much as possible.
+
+Transpiling? Not sure yet. It would mean ES7 features!
+
+### Code style
+
+- No semi-colons
+- Lambdas
+- Functional (Or at least some facets of functional programming)
+
+### Incremental
+
+Work on this for at least 30 minutes a day. No excuses!
+
+Started: Day 1 - Wednesday 3rd of February - Project set-up: git, npm, readme - Server set-up: Hapi, modules, domain objects
