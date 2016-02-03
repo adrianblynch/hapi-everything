@@ -47,14 +47,34 @@ server.register(
 	})
 })
 
-// Temp routes for now
+// TODO: Break user domain objects from Hapi routing
 server.route([
 	{
 		method: 'get',
-		path: '/',
+		path: '/users',
 		config: {
-			handler: (request, reply) => reply({up: "and", running: "!"}),
-			tags: ['api']
+			handler: (request, reply) => reply([{}, {}])
+		}
+	},
+	{
+		method: 'post',
+		path: '/users',
+		config: {
+			handler: (request, reply) => reply([{}, {}]).code(201)
+		}
+	},
+	{
+		method: 'put',
+		path: '/users/{id}',
+		config: {
+			handler: (request, reply) => reply({})
+		}
+	},
+	{
+		method: 'delete',
+		path: '/users/{id}',
+		config: {
+			handler: (request, reply) => reply().code(204)
 		}
 	},
 	{
@@ -63,7 +83,9 @@ server.route([
 		config: {
 			handler: (request, reply) => {
 				const db = request.server.plugins['hapi-mongodb'].db
-				const col = db.collection('users');
+				const col = db.collection('users')
+				const users = require('./users.json')
+				col.insertMany(users)
 				reply(col.find({}).toArray())
 			}
 		}
