@@ -18,7 +18,8 @@ server.register(
 			options: {
 				info: {
 					'title': 'API Documentation - Swagger'
-				}
+				},
+				documentationPath: '/'
 			}
 		},
 		{
