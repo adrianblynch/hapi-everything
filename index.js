@@ -74,6 +74,31 @@ server.route([
 		}
 	},
 	{
+		method: 'get',
+		path: '/users/{id}',
+		config: {
+			handler: (request, reply) => {
+				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
+				const user = col.findOne({ _id: request.params.id }, (err, doc) => {
+					if (err) {
+						return reply(err)
+					}
+					if (doc === null) {
+						return reply(Boom.notFound())
+					}
+					reply(doc)
+				})
+
+			},
+			validate: {
+				params: {
+					id: Joi.string().required()
+				}
+			},
+			tags: ['api']
+		}
+	},
+	{
 		method: 'post',
 		path: '/users',
 		config: {
@@ -134,7 +159,20 @@ server.route([
 		method: 'delete',
 		path: '/users/{id}',
 		config: {
-			handler: (request, reply) => reply(Boom.notImplemented()),
+			handler: (request, reply) => {
+				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
+				col.remove({_id: request.params.id}, (err, result) => {
+					if (err) {
+						return reply(err)
+					}
+					reply().code(204)
+				})
+			},
+			validate: {
+				params: {
+					id: Joi.string().required()
+				}
+			},
 			tags: ['api']
 		}
 	},

@@ -40,4 +40,4 @@ Work on this for at least 30 minutes a day. No excuses!
 Starting on Wednesday 3rd of February:
 
 - Day 1 - Project set-up: git, npm, readme - Server set-up: Hapi, routes, documentation
-- Day 2 - Start on CRUD with Mongo
+- Day 2 - CRUD for users
