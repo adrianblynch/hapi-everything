@@ -3,6 +3,7 @@
 const Hapi = require('hapi')
 const Joi = require('joi')
 const Boom = require('boom')
+const uuid = require('node-uuid')
 
 const server = new Hapi.Server()
 
@@ -50,6 +51,15 @@ server.register(
 	})
 })
 
+// TEMP: A user namespace in lew of a user module
+const user = {
+	schema:{
+		firstName: Joi.string().required(),
+		lastName: Joi.string().required(),
+		email: Joi.string().email().required()
+	}
+}
+
 // TODO: Break user domain objects from Hapi routing
 server.route([
 	{
@@ -69,27 +79,15 @@ server.route([
 		config: {
 			handler: (request, reply) => {
 				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
-				col.insert(request.payload, (err, results) => {
+				col.insert(request.payload, (err, result) => {
 					if (err) {
 						return reply(err)
 					}
-					reply(results.ops.map(item => {
-						return {
-							id: item.id,
-							firstName: item.firstName,
-							lastName: item.lastName,
-							email: item.email
-						}
-					})).code(201)
+					reply(result.ops[0]).code(201)
 				})
 			},
 			validate: {
-				payload: {
-					id: Joi.string().required(),
-					firstName: Joi.string().required(),
-					lastName: Joi.string().required(),
-					email: Joi.string().email().required()
-				}
+				payload: user.schema
 			},
 			tags: ['api']
 		}
@@ -98,7 +96,37 @@ server.route([
 		method: 'put',
 		path: '/users/{id}',
 		config: {
-			handler: (request, reply) => reply(Boom.notImplemented()),
+			pre: [(request, reply) => {
+				if (request.params.id !== request.payload._id) {
+					return reply(Boom.conflict())
+				}
+				reply()
+			}],
+			handler: (request, reply) => {
+				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
+				col.save(request.payload, (err, results) => {
+					if (err) {
+						return reply(err)
+					}
+					// TEMP: Get the document and return it
+					col.findOne({_id: request.payload._id}, (err, doc) => {
+						if (err) {
+							return reply(err)
+						}
+						reply(doc).code(200)
+					})
+				})
+			},
+			validate: {
+				params: {
+					id: Joi.string().required()
+				},
+				payload: Object.assign(
+					{},
+					user.schema,
+					{ _id: Joi.string().required() }
+				)
+			},
 			tags: ['api']
 		}
 	},
@@ -117,11 +145,21 @@ server.route([
 			handler: (request, reply) => {
 				// TEMP: This whole route can go once the CRUD for users is in place, for now:
 				return reply(Boom.notImplemented())
-				const db = request.server.plugins['hapi-mongodb'].db
-				const col = db.collection('users')
+				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
 				const users = require('./users.json')
-				col.insertMany(users)
-				return reply()
+				col.insertMany(users.map(user => {
+					return {
+						_id: uuid.v4(),
+						firstName: user.firstName,
+						lastName: user.lastName,
+						email: user.email
+					}
+				}), (err, results) => {
+					if (err) {
+						return reply(err)
+					}
+					reply().code(201)
+				})
 			},
 			tags: ['api']
 		}

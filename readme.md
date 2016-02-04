@@ -37,4 +37,7 @@ Transpiling? Not sure yet. It would mean ES7 features!
 
 Work on this for at least 30 minutes a day. No excuses!
 
-Started: Day 1 - Wednesday 3rd of February - Project set-up: git, npm, readme - Server set-up: Hapi, modules, domain objects
+Starting on Wednesday 3rd of February:
+
+- Day 1 - Project set-up: git, npm, readme - Server set-up: Hapi, routes, documentation
+- Day 2 - Start on CRUD with Mongo
