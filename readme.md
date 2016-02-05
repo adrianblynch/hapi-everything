@@ -41,3 +41,4 @@ Starting on Wednesday 3rd of February:
 
 - Day 1 - Project set-up: git, npm, readme - Server set-up: Hapi, routes, documentation
 - Day 2 - CRUD for users
+- Day 2.5 - Move CRUD into user object to simplify the routes

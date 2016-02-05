@@ -92,7 +92,7 @@ server.route([
 			},
 			validate: {
 				params: {
-					id: Joi.string().required()
+					id: Joi.string().guid().required()
 				}
 			},
 			tags: ['api']
@@ -121,7 +121,7 @@ server.route([
 			},
 			validate: {
 				params: {
-					id: Joi.string().required()
+					id: Joi.string().guid().required()
 				},
 				payload: Object.assign(
 					{},
@@ -141,7 +141,7 @@ server.route([
 			},
 			validate: {
 				params: {
-					id: Joi.string().required()
+					id: Joi.string().guid().required()
 				}
 			},
 			tags: ['api']
