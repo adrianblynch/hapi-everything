@@ -36,23 +36,24 @@ server.register(
 	],
 	(err) => {
 
-	if (err) {
-		console.log('Failed to register one or more plugins')
-		throw err
-	}
-
-	server.start(err => {
-
 		if (err) {
-			console.log('Failed to start the server')
+			console.log('Failed to register one or more plugins')
 			throw err
 		}
 
-		user = user(server.plugins['hapi-mongodb'].db.collection('users'))
+		server.start(err => {
 
-		console.log('Server running at:', server.info.uri)
+			if (err) {
+				console.log('Failed to start the server')
+				throw err
+			}
 
-	})
+			user = user(server.plugins['hapi-mongodb'].db.collection('users'))
+
+			console.log('Server running at:', server.info.uri)
+
+		})
+
 })
 
 // TEMP: A user namespace in lew of a user module
