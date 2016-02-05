@@ -50,7 +50,6 @@ server.register(
 	}
 )
 
-// TEMP: A user namespace in lew of a user module
 const userSchema = {
 	firstName: Joi.string().required(),
 	lastName: Joi.string().required(),
@@ -64,7 +63,6 @@ function paramAndPayloadIdMatch(request, reply) {
 	reply()
 }
 
-// TODO: Break user domain objects from Hapi routing
 server.route([
 	{
 		method: 'get',
