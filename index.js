@@ -1,9 +1,11 @@
 'use strict'
 
 const Hapi = require('hapi')
-const Joi = require('joi')
+const Joi  = require('joi')
 const Boom = require('boom')
 const uuid = require('node-uuid')
+
+let user = require('./lib/user')
 
 const server = new Hapi.Server()
 
@@ -46,18 +48,25 @@ server.register(
 			throw err
 		}
 
+		user = user(server.plugins['hapi-mongodb'].db.collection('users'))
+
 		console.log('Server running at:', server.info.uri)
 
 	})
 })
 
 // TEMP: A user namespace in lew of a user module
-const user = {
-	schema:{
-		firstName: Joi.string().required(),
-		lastName: Joi.string().required(),
-		email: Joi.string().email().required()
+const userSchema = {
+	firstName: Joi.string().required(),
+	lastName: Joi.string().required(),
+	email: Joi.string().email().required()
+}
+
+function paramAndPayloadIdMatch(request, reply) {
+	if (request.params.id !== request.payload._id) {
+		return reply(Boom.conflict())
 	}
+	reply()
 }
 
 // TODO: Break user domain objects from Hapi routing
@@ -67,8 +76,7 @@ server.route([
 		path: '/users',
 		config: {
 			handler: (request, reply) => {
-				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
-				return reply(col.find({}).limit(10).toArray())
+				reply(user.get())
 			},
 			tags: ['api']
 		}
@@ -78,17 +86,9 @@ server.route([
 		path: '/users/{id}',
 		config: {
 			handler: (request, reply) => {
-				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
-				const user = col.findOne({ _id: request.params.id }, (err, doc) => {
-					if (err) {
-						return reply(err)
-					}
-					if (doc === null) {
-						return reply(Boom.notFound())
-					}
-					reply(doc)
-				})
-
+				reply(user.get(request.params.id).then(doc => {
+					return doc || Boom.notFound()
+				}))
 			},
 			validate: {
 				params: {
@@ -103,16 +103,10 @@ server.route([
 		path: '/users',
 		config: {
 			handler: (request, reply) => {
-				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
-				col.insert(request.payload, (err, result) => {
-					if (err) {
-						return reply(err)
-					}
-					reply(result.ops[0]).code(201)
-				})
+				reply(user.add(request.payload)).code(201)
 			},
 			validate: {
-				payload: user.schema
+				payload: userSchema
 			},
 			tags: ['api']
 		}
@@ -121,26 +115,9 @@ server.route([
 		method: 'put',
 		path: '/users/{id}',
 		config: {
-			pre: [(request, reply) => {
-				if (request.params.id !== request.payload._id) {
-					return reply(Boom.conflict())
-				}
-				reply()
-			}],
+			pre: [paramAndPayloadIdMatch],
 			handler: (request, reply) => {
-				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
-				col.save(request.payload, (err, results) => {
-					if (err) {
-						return reply(err)
-					}
-					// TEMP: Get the document and return it
-					col.findOne({_id: request.payload._id}, (err, doc) => {
-						if (err) {
-							return reply(err)
-						}
-						reply(doc).code(200)
-					})
-				})
+				reply(user.edit(request.payload))
 			},
 			validate: {
 				params: {
@@ -148,7 +125,7 @@ server.route([
 				},
 				payload: Object.assign(
 					{},
-					user.schema,
+					userSchema,
 					{ _id: Joi.string().required() }
 				)
 			},
@@ -160,13 +137,7 @@ server.route([
 		path: '/users/{id}',
 		config: {
 			handler: (request, reply) => {
-				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
-				col.remove({_id: request.params.id}, (err, result) => {
-					if (err) {
-						return reply(err)
-					}
-					reply().code(204)
-				})
+				reply(user.remove(request.params.id).then(removed => removed ? null : Boom.notFound())).code(204)
 			},
 			validate: {
 				params: {
