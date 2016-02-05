@@ -4,7 +4,15 @@ A Hapi server with multiple frontends.
 
 ## Why?
 
-To compare frontend libraries and frameworks.
+To use as a test bed for all the wonderful things Hapi (and its plugins) offer.
+
+To compare frontend libraries and frameworks acting on the same data.
+
+## Features
+
+- Hapi users API
+- Logging to [Loggly](https://www.loggly.com/)
+- Persistance to [MongoDB](https://www.mongodb.org/)
 
 ## Aims
 
@@ -42,3 +50,4 @@ Starting on Wednesday 3rd of February:
 - Day 1 - Project set-up: git, npm, readme - Server set-up: Hapi, routes, documentation
 - Day 2 - CRUD for users
 - Day 2.5 - Move CRUD into user object to simplify the routes
+- Day 3 - Create Users Hapi plugin - Add logging and send to Loggly
