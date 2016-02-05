@@ -4,6 +4,8 @@ const Hapi = require('hapi')
 const Boom = require('boom')
 const uuid = require('node-uuid')
 
+const config = require('./config')
+
 const server = new Hapi.Server()
 
 server.connection({
@@ -17,8 +19,20 @@ const goodOptions = {
 			reporter: require('good-console'),
 			events: {
 				log: '*',
-				response: '*',
-				ops: '*'
+				response: '*'
+			}
+		},
+		{
+			reporter: require('good-loggly'),
+			events: {
+				log: '*',
+				response: '*'
+			},
+			config: {
+				token: config.loggly.token,
+				subdomain: config.loggly.subdomain,
+				name: 'hapi-everything',
+				tags: ['api']
 			}
 		}
 	]

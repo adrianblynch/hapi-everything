@@ -1,0 +1,6 @@
+{
+	"loggly": {
+		"token": "LOGGLY_TOKEN",
+		"subdomain": "LOGGLY_SUBDOMAIN"
+	}
+}
