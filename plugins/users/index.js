@@ -10,7 +10,7 @@ const userSchema = {
 	email: Joi.string().email().required()
 }
 
-exports.register = function (server, options, next) {
+exports.register = (server, options, next) => {
 
 	const user = User(server.plugins['hapi-mongodb'].db.collection('users'))
 
