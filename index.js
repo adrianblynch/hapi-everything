@@ -37,13 +37,15 @@ const goodOptions = {
 		}
 	]
 }
+const mongoDbOptions = { url: 'mongodb://localhost:27017/everything' }
+const swaggerOptions = { info: { 'title': 'Hapi Everything API Documentation' }, documentationPath: '/' }
 
 server.register(
 	[
 		{ register: require('inert') },
 		{ register: require('vision') },
-		{ register: require('hapi-swagger'), options: { info: { 'title': 'API Documentation - Swagger' }, documentationPath: '/' } },
-		{ register: require('hapi-mongodb'), options: { url: 'mongodb://localhost:27017/everything' } },
+		{ register: require('hapi-swagger'), options: swaggerOptions },
+		{ register: require('hapi-mongodb'), options: mongoDbOptions },
 		{ register: require('good'), options: goodOptions},
 		{ register: require('./plugins/users'), options: {} }
 	],
