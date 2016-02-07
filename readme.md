@@ -41,6 +41,13 @@ Transpiling? Not sure yet. It would mean ES7 features!
 - Comment liberally - Why? - Because this is a learning experience and the more explanations alongside the code the better - Maybe
 - Code that acts as its own comment: http://blog.codinghorror.com/coding-without-comments/ - Namely descriptive names for functions and variables
 
+## Start-up
+
+Not definitive, but this'll get things mostly up and running:
+
+- `npm start` to get the API up and running
+- Ensure MongoDB is running locally
+
 ### Incremental
 
 Work on this for at least 30 minutes a day. No excuses!

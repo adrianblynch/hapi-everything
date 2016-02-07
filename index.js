@@ -47,7 +47,8 @@ server.register(
 		{ register: require('hapi-swagger'), options: swaggerOptions },
 		{ register: require('hapi-mongodb'), options: mongoDbOptions },
 		{ register: require('good'), options: goodOptions},
-		{ register: require('./plugins/users'), options: {} }
+		{ register: require('./plugins/users'), options: {} },
+		{ register: require('./plugins/groups'), options: {} }
 	],
 	err => {
 		if (err) {
