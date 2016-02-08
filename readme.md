@@ -47,6 +47,7 @@ Not definitive, but this'll get things mostly up and running:
 
 - `npm start` to get the API up and running
 - Ensure MongoDB is running locally
+- Ensure OrientDB is running
 
 ### Incremental
 

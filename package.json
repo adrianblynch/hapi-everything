@@ -4,7 +4,7 @@
   "description": "Multiple frontends alongside a Hapi server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --harmony index.js",
+    "start": "nodemon --harmony --harmony-destructuring index.js",
     "test": "test"
   },
   "repository": {
@@ -34,6 +34,7 @@
     "inert": "^3.2.0",
     "joi": "^7.2.3",
     "node-uuid": "^1.4.7",
+    "orientjs": "^2.1.0",
     "vision": "^4.0.1"
   }
 }
