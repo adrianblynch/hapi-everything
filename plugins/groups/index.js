@@ -58,7 +58,7 @@ exports.register = (server, options, next) => {
 					payload: Object.assign(
 						{},
 						groupSchema,
-						{ _id: Joi.string().required() }
+						{ id: Joi.string().required() }
 					)
 				},
 				tags: ['api']
