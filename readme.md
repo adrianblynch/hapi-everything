@@ -59,3 +59,6 @@ Starting on Wednesday 3rd of February:
 - Day 2 - CRUD for users
 - Day 2.5 - Move CRUD into user object to simplify the routes
 - Day 3 - Create Users Hapi plugin - Add logging and send to Loggly
+- Day 4 - Added groups to graph
+
+Next: Serve nested groups 
