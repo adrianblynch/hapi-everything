@@ -38,7 +38,7 @@ const goodOptions = {
 	]
 }
 const mongoDbOptions = { url: 'mongodb://localhost:27017/everything' }
-const swaggerOptions = { info: { 'title': 'Hapi Everything API Documentation' }, documentationPath: '/' }
+const swaggerOptions = { info: { 'title': 'Hapi Everything API Documentation' }, documentationPath: '/', sortEndpoints: 'path' }
 
 server.register(
 	[
