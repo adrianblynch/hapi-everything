@@ -10,11 +10,10 @@ To compare frontend libraries and frameworks acting on the same data.
 
 ## Features
 
-- Hapi users API
+- Hapi users/groups API
 - Logging to [Loggly](https://www.loggly.com/)
 - Persistance to [MongoDB](https://www.mongodb.org/)
-
-## Aims
+- Relationships stored in [OrientDB](http://orientdb.com/)
 
 ### Modular 
 
