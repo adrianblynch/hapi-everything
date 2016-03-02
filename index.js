@@ -65,9 +65,22 @@ server.register(
 	}
 )
 
+// Applications
+server.route([
+	{
+		path: '/apps/aurelia/{param*}',
+		method: ['get'],
+		handler: {
+			directory: {
+				path: 'apps/aurelia'
+			}
+		}
+	}
+])
+
 server.method('helpers', require('./plugins/helpers'));
 
-// TEMP: This whole route can go once the CRUD for users is in place, for now:
+// TEMP: This whole route can go once the CRUD for users is in place, for now though:
 server.route([
 	{
 		method: 'get',
