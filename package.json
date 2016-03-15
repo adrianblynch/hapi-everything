@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/adrianblynch/hapi-everything#readme",
   "dependencies": {
+    "blipp": "^2.3.0",
     "boom": "^3.1.2",
     "good": "^6.5.0",
     "good-console": "^5.3.1",

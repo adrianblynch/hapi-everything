@@ -45,6 +45,7 @@ server.register(
 		{ register: require('inert') },
 		{ register: require('vision') },
 		{ register: require('hapi-swagger'), options: swaggerOptions },
+		{ register: require('blipp') },
 		{ register: require('hapi-mongodb'), options: mongoDbOptions },
 		{ register: require('good'), options: goodOptions},
 		{ register: require('./plugins/users'), options: {} },
