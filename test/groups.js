@@ -5,7 +5,7 @@ const BASE_URL = 'http://localhost:8000'
 
 // TODO: Use `resolveWithFullResponse: true` to get back the full response for status code and header checks
 const getGroups = () => request({ url: `${BASE_URL}/groups`, json: true })
-const getGroup = id => request({ url: `${BASE_URL}/groups/${id}`, json: true })
+const getGroup = group => request({ url: `${BASE_URL}/groups/${group.id}`, json: true })
 const addGroup = group => request({
 	method: 'post',
 	url: `${BASE_URL}/groups`,
@@ -23,19 +23,24 @@ const updateGroup = group => request({
 		parentId: group.parentId
 	}
 })
-const deleteGroup = id => request({ method: 'delete', url: `${BASE_URL}/groups/${id}` })
+const deleteGroup = group => request({ method: 'delete', url: `${BASE_URL}/groups/${group.id}` })
 
 const context = {} // TODO: See if there's a better way
 
 test.before(async t => {
 
 	const groups = [
-		{name: 'Test Group 1'},
-		{name: 'Test Group 2'}
+		{name: 'Group to get'},
+		{name: 'Group to update'},
+		{name: 'Group to delete'}
 	]
 
 	context.groups = await Promise.all(groups.map(addGroup))
 
+})
+
+test.after(async t => {
+	await Promise.all(context.groups.map(deleteGroup)).catch(err => err)
 })
 
 test('GET /groups', async t => {
@@ -50,13 +55,39 @@ test('GET /groups', async t => {
 
 test('GET /groups/:id', async t => {
 
-	const groupId = context.groups[0].id
-	const group = await getGroup(groupId)
+	const groupToGet = context.groups[0]
+	const group = await getGroup(groupToGet)
 
-	t.is(group.id, groupId)
+	t.is(group.id, groupToGet.id)
 
 })
 
-test.after(async t => {
-	await Promise.all(context.groups.map(group => deleteGroup(group.id)))
+test('POST /groups', async t => {
+
+	const groupToAdd = {name: 'A new group'}
+	const group = await addGroup(groupToAdd)
+
+	t.is(group.name, groupToAdd.name)
+
+	context.groups.push(group) // Tidy up
+
+})
+
+test('PUT /groups', async t => {
+
+	const name = 'Updated name'
+	const groupToUpdate = Object.assign({}, context.groups[1], {name})
+	const updatedGroup = await updateGroup(groupToUpdate)
+
+	t.is(updatedGroup.name, groupToUpdate.name)
+
+})
+
+test('DELETE /groups/:id', async t => {
+
+	const groupToDelete = context.groups[2]
+	const deletedGroup = await deleteGroup(groupToDelete)
+
+	t.is(deletedGroup, '')
+
 })
