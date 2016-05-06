@@ -14,8 +14,9 @@ To compare frontend libraries and frameworks acting on the same data.
 - Logging to [Loggly](https://www.loggly.com/)
 - Persistance to [MongoDB](https://www.mongodb.org/)
 - Relationships stored in [OrientDB](http://orientdb.com/)
+- Testing with [Ava](https://github.com/sindresorhus/ava)
 
-### Modular 
+### Modular
 
 It's easy to create a Hapi server with basic routes, better still is to pull functionality into modules, both Hapi modules (route logic and orchestration) and business modules (CRUD and business rules for domain objects).
 
@@ -60,4 +61,4 @@ Starting on Wednesday 3rd of February:
 - Day 3 - Create Users Hapi plugin - Add logging and send to Loggly
 - Day 4 - Added groups to graph
 
-Next: Serve nested groups 
+Next: Serve nested groups
