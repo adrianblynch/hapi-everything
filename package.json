@@ -4,8 +4,8 @@
   "description": "Multiple frontends alongside a Hapi server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --harmony --harmony-destructuring index.js",
-    "test": "test"
+    "start": "nodemon index.js",
+    "test": "ava test --verbose --timeout 2s"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,11 @@
     "inert": "^3.2.0",
     "joi": "^7.2.3",
     "node-uuid": "^1.4.7",
-    "orientjs": "^2.1.0",
+    "orientjs": "^2.2.0-beta2",
     "vision": "^4.0.1"
+  },
+  "devDependencies": {
+    "ava": "^0.14.0",
+    "request-promise": "^3.0.0"
   }
 }

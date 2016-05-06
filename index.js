@@ -4,6 +4,8 @@ const Hapi = require('hapi')
 const Boom = require('boom')
 const uuid = require('node-uuid')
 
+// TODO: Catbox for caching
+
 const config = require('./config')
 
 const server = new Hapi.Server()
@@ -66,7 +68,7 @@ server.register(
 	}
 )
 
-// Applications
+// Applications - Do we need a route per app? Prolly not.
 server.route([
 	{
 		path: '/apps/aurelia/{param*}',
