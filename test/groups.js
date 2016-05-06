@@ -1,31 +1,7 @@
 import test from 'ava'
-import request from 'request-promise'
+import api from './helpers/api'
 
-const BASE_URL = 'http://localhost:8000'
-
-// TODO: Use `resolveWithFullResponse: true` to get back the full response for status code and header checks
-const getGroups = () => request({ url: `${BASE_URL}/groups`, json: true })
-const getGroup = group => request({ url: `${BASE_URL}/groups/${group.id}`, json: true })
-const addGroup = group => request({
-	method: 'post',
-	url: `${BASE_URL}/groups`,
-	json: {
-		name: group.name,
-		parentId: group.parentId
-	}
-})
-const updateGroup = group => request({
-	method: 'put',
-	url: `${BASE_URL}/groups/${group.id}`,
-	json: {
-		id: group.id,
-		name: group.name,
-		parentId: group.parentId
-	}
-})
-const deleteGroup = group => request({ method: 'delete', url: `${BASE_URL}/groups/${group.id}` })
-
-const context = {} // TODO: See if there's a better way
+const context = {} // TODO: See if there's a better way - beforeEach gives us t.context, this is to keep things consistent - Though some might say confusing
 
 test.before(async t => {
 
@@ -35,17 +11,17 @@ test.before(async t => {
 		{name: 'Group to delete'}
 	]
 
-	context.groups = await Promise.all(groups.map(addGroup))
+	context.groups = await Promise.all(groups.map(api.addGroup))
 
 })
 
 test.after(async t => {
-	await Promise.all(context.groups.map(deleteGroup)).catch(err => err)
+	await Promise.all(context.groups.map(api.deleteGroup)).catch(err => err) // Ignore any errors - Why? - Because we may have deleted a group already
 })
 
 test('GET /groups', async t => {
 
-	const groups = await getGroups()
+	const groups = await api.getGroups()
 	const groupIds = groups.map(g => g.id)
 	const expectedGroupIds = context.groups.map(g => g.id)
 
@@ -56,7 +32,7 @@ test('GET /groups', async t => {
 test('GET /groups/:id', async t => {
 
 	const groupToGet = context.groups[0]
-	const group = await getGroup(groupToGet)
+	const group = await api.getGroup(groupToGet)
 
 	t.is(group.id, groupToGet.id)
 
@@ -65,7 +41,7 @@ test('GET /groups/:id', async t => {
 test('POST /groups', async t => {
 
 	const groupToAdd = {name: 'A new group'}
-	const group = await addGroup(groupToAdd)
+	const group = await api.addGroup(groupToAdd)
 
 	t.is(group.name, groupToAdd.name)
 
@@ -77,7 +53,7 @@ test('PUT /groups', async t => {
 
 	const name = 'Updated name'
 	const groupToUpdate = Object.assign({}, context.groups[1], {name})
-	const updatedGroup = await updateGroup(groupToUpdate)
+	const updatedGroup = await api.updateGroup(groupToUpdate)
 
 	t.is(updatedGroup.name, groupToUpdate.name)
 
@@ -86,7 +62,7 @@ test('PUT /groups', async t => {
 test('DELETE /groups/:id', async t => {
 
 	const groupToDelete = context.groups[2]
-	const deletedGroup = await deleteGroup(groupToDelete)
+	const deletedGroup = await api.deleteGroup(groupToDelete)
 
 	t.is(deletedGroup, '')
 

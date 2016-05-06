@@ -13,9 +13,8 @@
   },
   "keywords": [
     "Hapi",
-    "Backbone",
-    "Marionette",
-    "Rivets"
+    "Mongo",
+    "OrientDB"
   ],
   "author": "Adrian Lynch (adi_ady_ade@hotmail.com)",
   "license": "MIT",
