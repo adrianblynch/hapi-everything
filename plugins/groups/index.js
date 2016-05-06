@@ -34,6 +34,14 @@ exports.register = (server, options, next) => {
 			}
 		},
 		{
+			path: '/groups',
+			method: 'delete',
+			config: {
+				handler: (request, reply) => reply(group.removeAll()).code(204),
+				tags: ['api']
+			}
+		},
+		{
 			path: '/groups/{id}',
 			method: 'get',
 			config: {
