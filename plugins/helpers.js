@@ -9,7 +9,7 @@ module.exports = () => {
 }
 
 function paramAndPayloadIdMatch(request, reply) {
-	if (request.params.id !== request.payload._id) {
+	if (request.params.id !== request.payload.id) {
 		return reply(Boom.conflict())
 	}
 	reply()

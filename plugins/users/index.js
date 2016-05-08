@@ -4,7 +4,7 @@ const Joi  = require('joi')
 const Boom = require('boom')
 const User = require('../../lib/user')
 
-const userSchema = {
+const baseUserSchema = {
 	firstName: Joi.string().required(),
 	lastName: Joi.string().required(),
 	email: Joi.string().email().required()
@@ -49,7 +49,7 @@ exports.register = (server, options, next) => {
 				config: {
 					handler: (request, reply) => reply(user.add(request.payload)).code(201),
 					validate: {
-						payload: userSchema
+						payload: baseUserSchema
 					},
 					tags: ['api']
 				}
@@ -68,8 +68,10 @@ exports.register = (server, options, next) => {
 						},
 						payload: Object.assign(
 							{},
-							userSchema,
-							{ _id: Joi.string().required() }
+							baseUserSchema,
+							{
+								id: Joi.string().guid().required()
+							}
 						)
 					},
 					tags: ['api']
