@@ -12,8 +12,7 @@ test.after(async t => {
 test('GET /users', async t => {
 
 	// Create some users
-	let usersToAdd = [api.makeUser(), api.makeUser(), api.makeUser()]
-	usersToAdd = await Promise.all(usersToAdd.map(api.addUser))
+	const usersToAdd = await Promise.all([api.addUser(), api.addUser(), api.addUser()])
 
 	// Get all users and look for the newly created users in amongst them
 	const allUsers = await api.getUsers()
@@ -29,7 +28,7 @@ test('GET /users', async t => {
 
 test('GET /users/:id', async t => {
 
-	const userToGet = await api.addUser(api.makeUser())
+	const userToGet = await api.addUser()
 	const user = await api.getUser(userToGet)
 
 	t.is(user.id, userToGet.id)
@@ -53,7 +52,7 @@ test('POST /users', async t => {
 
 test('PUT /users/:id', async t => {
 
-	const userToUpdate = await api.addUser(api.makeUser())
+	const userToUpdate = await api.addUser()
 
 	Object.assign(userToUpdate, {
 		firstName: 'Updated first name',
@@ -73,7 +72,7 @@ test('PUT /users/:id', async t => {
 
 test('DELETE /users/:id', async t => {
 
-	const userToDelete = await api.addUser(api.makeUser())
+	const userToDelete = await api.addUser()
 	const deletedUser = await api.deleteUser(userToDelete)
 
 	t.is(deletedUser, '')

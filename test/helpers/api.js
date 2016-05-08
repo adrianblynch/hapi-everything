@@ -1,26 +1,41 @@
 // Helpers for tests - A bit of a dumping ground at the moment - Could do with some consolidation
-// ES5 unil I transpile myself or this gets implemented: https://github.com/sindresorhus/ava/issues/720
+// NOTE: Not as much ES6 goodness until I transpile myself or this gets implemented: https://github.com/sindresorhus/ava/issues/720
+// TODO: Use `resolveWithFullResponse: true` to get back the full response for status code and header checks
 
 const request = require('request-promise')
 const uuid = require('node-uuid')
 
 const BASE_URL = 'http://localhost:8000'
 
-// TODO: Use `resolveWithFullResponse: true` to get back the full response for status code and header checks
-module.exports = {
+////////////
+// Groups //
+////////////
 
-	// Groups
-	getGroups: () => request({ url: `${BASE_URL}/groups`, json: true }),
-	getGroup: group => request({ url: `${BASE_URL}/groups/${group.id}`, json: true }),
-	addGroup: group => request({
+function makeGroup(group) {
+	return Object.assign({name: uuid.v4()}, group)
+}
+
+function getGroups() {
+	return request({ url: `${BASE_URL}/groups`, json: true })
+}
+
+function getGroup(group) {
+	return request({ url: `${BASE_URL}/groups/${group.id}`, json: true })
+}
+
+function addGroup(group = makeGroup()) {
+	return request({
 		method: 'post',
 		url: `${BASE_URL}/groups`,
 		json: {
 			name: group.name,
 			parentId: group.parentId
 		}
-	}),
-	updateGroup: group => request({
+	})
+}
+
+function updateGroup(group) {
+	return request({
 		method: 'put',
 		url: `${BASE_URL}/groups/${group.id}`,
 		json: {
@@ -28,26 +43,38 @@ module.exports = {
 			name: group.name,
 			parentId: group.parentId
 		}
-	}),
-	deleteGroup: group => request({ method: 'delete', url: `${BASE_URL}/groups/${group.id}` }),
+	})
+}
 
-	// Users
+function deleteGroup(group) {
+	return request({ method: 'delete', url: `${BASE_URL}/groups/${group.id}` })
+}
 
-	makeUser: (user) => {
-		return Object.assign(
-			{},
-			{
-				firstName: uuid.v4(),
-				lastName: uuid.v4(),
-				email: `${uuid.v4()}@email.com`
-			},
-			user
-		)
-	},
+///////////
+// Users //
+///////////
 
-	getUsers: () => request({ url: `${BASE_URL}/users`, json: true }),
-	getUser: user => request({ url: `${BASE_URL}/users/${user.id}`, json: true }),
-	addUser: user => request({
+function makeUser(user) {
+	return Object.assign(
+		{
+			firstName: uuid.v4(),
+			lastName: uuid.v4(),
+			email: `${uuid.v4()}@email.com`
+		},
+		user
+	)
+}
+
+function getUsers() {
+	return request({ url: `${BASE_URL}/users`, json: true })
+}
+
+function getUser(user) {
+	return request({ url: `${BASE_URL}/users/${user.id}`, json: true })
+}
+
+function addUser(user = makeUser()) {
+	return request({
 		method: 'post',
 		url: `${BASE_URL}/users`,
 		json: {
@@ -55,8 +82,11 @@ module.exports = {
 			lastName: user.lastName,
 			email: user.email
 		}
-	}),
-	updateUser: user => request({
+	})
+}
+
+function updateUser(user) {
+	return request({
 		method: 'put',
 		url: `${BASE_URL}/users/${user.id}`,
 		json: {
@@ -65,6 +95,27 @@ module.exports = {
 			lastName: user.lastName,
 			email: user.email
 		}
-	}),
-	deleteUser: user => request({ method: 'delete', url: `${BASE_URL}/users/${user.id}` })
+	})
+}
+
+function deleteUser(user) {
+	return request({ method: 'delete', url: `${BASE_URL}/users/${user.id}` })
+}
+
+module.exports = {
+
+	makeGroup: makeGroup,
+	getGroups: getGroups,
+	getGroup: getGroup,
+	addGroup: addGroup,
+	updateGroup: updateGroup,
+	deleteGroup: deleteGroup,
+
+	makeUser: makeUser,
+	getUsers: getUsers,
+	getUser: getUser,
+	addUser: addUser,
+	updateUser: updateUser,
+	deleteUser: deleteUser
+
 }
