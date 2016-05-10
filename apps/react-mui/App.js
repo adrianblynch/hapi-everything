@@ -5,10 +5,19 @@
 
 import React from 'react'
 
-import {deepOrange500} from 'material-ui/styles/colors'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import {AppBar, IconMenu, MenuItem, IconButton, MoreVertIcon} from 'material-ui'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import {deepOrange500} from 'material-ui/styles/colors'
+import {AppBar} from 'material-ui'
+import {
+	Table,
+	TableBody,
+	TableHeader,
+	TableHeaderColumn,
+	TableRow,
+	TableRowColumn
+} from 'material-ui/Table'
+import {RaisedButton, Popover, MenuItem, Menu} from 'material-ui'
 
 const muiTheme = getMuiTheme()
 
@@ -17,22 +26,48 @@ class App extends React.Component {
 	constructor() {
 		super()
 		this.state = {
-			users: []
+			users: [],
+			selectedUsers: 'none'
 		}
-		fetch('http://localhost:8000/users')
-			.then(response => response.json())
-			.then(response => {
-				this.setState({users: response})
-			})
+		fetch('http://localhost:3838/users')
+		.then(response => response.json())
+		.then(response => {
+			this.setState({users: response})
+		})
+	}
+
+	markUsersSelected(selection) {
+		// this.setState({selectedUsers: selection}) // Wipes the selected users in the Table component
+		this.state.selectedUsers = selection // Leaves the users in place - Find out how to do this better
+	}
+
+	deleteSelectedUsers() {
+
+		const {selectedUsers, users} = this.state
+		const usersToDelete = users.filter((user, index) => {
+			return selectedUsers === 'all' || (Array.isArray(selectedUsers) && selectedUsers.includes(index))
+		})
+
+		// Optimistically requesting to delete users
+
+		Promise.all(usersToDelete.map(user =>
+			fetch(`http://localhost:3838/users/${user.id}`, {method: 'DELETE'})
+			.catch(err => console.log("Failed to delete user", user, err))
+		))
+		.then(responses => {
+			const remainingUsers = users.filter(user => !usersToDelete.includes(user))
+			this.setState({users: remainingUsers})
+		})
+
 	}
 
 	render() {
-		console.log("STATE:", this.state.users)
 		return (
 			<MuiThemeProvider muiTheme={muiTheme}>
 				<div>
 					<AppBar title="React Material UI" />
-					<UserList users={this.state.users} />
+					<ActionsBar active={true} deleteSelectedUsers={this.deleteSelectedUsers.bind(this)} />
+					<UserList users={this.state.users} usersSelected={this.markUsersSelected.bind(this)} />
 				</div>
 			</MuiThemeProvider>
 		)
@@ -40,43 +75,80 @@ class App extends React.Component {
 
 }
 
-class UserList extends React.Component {
+class ActionsBar extends React.Component {
 
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
+		this.state = {
+			open: false
+		}
+		this.handleTouchTap = this.handleTouchTap.bind(this)
+		this.handleRequestClose = this.handleRequestClose.bind(this)
+		this.handleDeleteClick = this.handleDeleteClick.bind(this)
+	}
+
+	handleTouchTap(event) {
+		event.preventDefault()
+		this.setState({
+			open: true,
+			anchorEl: event.currentTarget
+		})
+	}
+
+	handleRequestClose() {
+		this.setState({
+			open: false,
+			anchorEl: null
+		})
+	}
+
+	handleDeleteClick(event) {
+		console.log("Delete selected users")
+		this.props.deleteSelectedUsers()
 	}
 
 	render() {
 		return (
-			<table>
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>First name</th>
-						<th>Last name</th>
-						<th>Email</th>
-					</tr>
-				</thead>
-				<tbody>
-					{this.props.users.map((user, i) => <UserListItem key={i} user={user} />)}
-				</tbody>
-			</table>
+			<div>
+				<RaisedButton label="Actions" onClick={this.handleTouchTap} disabled={!this.props.active} />
+				<Popover open={this.state.open} anchorEl={this.state.anchorEl} onRequestClose={this.handleRequestClose}>
+					<Menu>
+						<MenuItem primaryText="Delete" onClick={this.props.deleteSelectedUsers} />
+					</Menu>
+				</Popover>
+			</div>
 		)
 	}
-
 }
 
-class UserListItem extends React.Component {
+class UserList extends React.Component {
+
+	constructor(props) {
+		super(props)
+	}
 
 	render() {
-		const {id, firstName, lastName, email} = this.props.user
 		return (
-			<tr>
-				<td>{id}</td>
-				<td>{firstName}</td>
-				<td>{lastName}</td>
-				<td>{email}</td>
-			</tr>
+			<Table multiSelectable={true} onRowSelection={this.props.usersSelected.bind(this)}>
+				<TableHeader>
+					<TableRow>
+						<TableHeaderColumn>ID</TableHeaderColumn>
+						<TableHeaderColumn>First name</TableHeaderColumn>
+						<TableHeaderColumn>Last name</TableHeaderColumn>
+						<TableHeaderColumn>Email</TableHeaderColumn>
+					</TableRow>
+				</TableHeader>
+				<TableBody deselectOnClickaway={false}>
+					{this.props.users.map((user, i) => (
+						<TableRow key={user.id}>
+							<TableRowColumn>{user.id}</TableRowColumn>
+							<TableRowColumn>{user.firstName}</TableRowColumn>
+							<TableRowColumn>{user.lastName}</TableRowColumn>
+							<TableRowColumn>{user.email}</TableRowColumn>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
 		)
 	}
 

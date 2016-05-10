@@ -90,6 +90,14 @@ exports.register = (server, options, next) => {
 					tags: ['api']
 				}
 			},
+			{
+				method: 'delete',
+				path: '/users',
+				config: {
+					handler: (request, reply) => reply(user.removeAll()).code(204),
+					tags: ['api']
+				}
+			}
 		]
 	)
 

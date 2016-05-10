@@ -5,7 +5,7 @@
 const request = require('request-promise')
 const uuid = require('node-uuid')
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://localhost:3838'
 
 ////////////
 // Groups //
