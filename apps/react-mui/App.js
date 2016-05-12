@@ -8,16 +8,10 @@ import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import {deepOrange500} from 'material-ui/styles/colors'
-import {AppBar} from 'material-ui'
-import {
-	Table,
-	TableBody,
-	TableHeader,
-	TableHeaderColumn,
-	TableRow,
-	TableRowColumn
-} from 'material-ui/Table'
-import {RaisedButton, Popover, MenuItem, Menu} from 'material-ui'
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table'
+import { AppBar, RaisedButton, FlatButton, Popover, MenuItem, Menu, Dialog, TextField } from 'material-ui'
+import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar'
+import FontIcon from 'material-ui/FontIcon'
 
 const muiTheme = getMuiTheme()
 
@@ -27,7 +21,8 @@ class App extends React.Component {
 		super()
 		this.state = {
 			users: [],
-			selectedUsers: 'none'
+			selectedUsers: 'none',
+			showAddUser: false
 		}
 		fetch('http://localhost:3838/users')
 		.then(response => response.json())
@@ -61,13 +56,24 @@ class App extends React.Component {
 
 	}
 
+	toggleAddUser() {
+		this.setState({showAddUser: !this.state.showAddUser})
+	}
+
 	render() {
 		return (
 			<MuiThemeProvider muiTheme={muiTheme}>
 				<div>
 					<AppBar title="React Material UI" />
-					<ActionsBar active={true} deleteSelectedUsers={this.deleteSelectedUsers.bind(this)} />
-					<UserList users={this.state.users} usersSelected={this.markUsersSelected.bind(this)} />
+					<ActionsBar
+						deleteSelectedUsers={this.deleteSelectedUsers.bind(this)}
+						showAddUser={this.toggleAddUser.bind(this)}
+					/>
+					{
+						this.state.showAddUser ?
+						<UserForm /> :
+						<UserList users={this.state.users} usersSelected={this.markUsersSelected.bind(this)} />
+					}
 				</div>
 			</MuiThemeProvider>
 		)
@@ -75,57 +81,110 @@ class App extends React.Component {
 
 }
 
+class ConfirmUserDelete extends React.Component {
+	constructor(props) {
+		console.log("ConfirmUserDelete constructed", props)
+		super(props)
+		this.state = {
+			userCount: 0,
+			open: props.open
+		}
+	}
+	onConfirm() {
+		this.props.onConfirm()
+	}
+	onCancel() {
+		this.setState({open: false})
+	}
+	render() {
+		console.log("ConfirmUserDelete rendered", this.props)
+
+		const {userCount} = this.props
+		const actions = [
+			<FlatButton
+				label="Cancel"
+				primary={true}
+				onTouchTap={this.onCancel.bind(this)}
+			/>,
+			<FlatButton
+				label="Delete"
+				primary={true}
+				onTouchTap={this.onConfirm.bind(this)}
+			/>
+		];
+		return (
+			<Dialog
+				actions={actions}
+				modal={false}
+				open={this.state.open}
+				onRequestClose={this.handleClose}
+			>Delete selected users?</Dialog>
+		)
+	}
+}
+
 class ActionsBar extends React.Component {
 
 	constructor(props) {
 		super(props)
 		this.state = {
-			open: false
+			confirmUserDeleteOpen: false,
+			deleteUsersActive: true
 		}
-		this.handleTouchTap = this.handleTouchTap.bind(this)
-		this.handleRequestClose = this.handleRequestClose.bind(this)
-		this.handleDeleteClick = this.handleDeleteClick.bind(this)
 	}
 
-	handleTouchTap(event) {
-		event.preventDefault()
-		this.setState({
-			open: true,
-			anchorEl: event.currentTarget
-		})
+	handleDeleteUsers() {
+		this.setState({confirmUserDeleteOpen: true})
 	}
 
-	handleRequestClose() {
-		this.setState({
-			open: false,
-			anchorEl: null
-		})
-	}
-
-	handleDeleteClick(event) {
-		console.log("Delete selected users")
+	handlerDeleteUsersConfirmation() {
 		this.props.deleteSelectedUsers()
+		this.setState({confirmUserDeleteOpen: false})
+	}
+
+	handlerDeleteUsersCancel() {
+		this.setState({confirmUserDeleteOpen: false})
+	}
+
+	handleAddUser() {
+		this.props.showAddUser()
+		this.setState({deleteUsersActive: false})
 	}
 
 	render() {
+
+		const userDeleteActions = [
+			<FlatButton label="Cancel" onClick={this.handlerDeleteUsersCancel.bind(this)} />,
+			<FlatButton label="Delete" onClick={this.handlerDeleteUsersConfirmation.bind(this)} />
+		]
+
 		return (
-			<div>
-				<RaisedButton label="Actions" onClick={this.handleTouchTap} disabled={!this.props.active} />
-				<Popover open={this.state.open} anchorEl={this.state.anchorEl} onRequestClose={this.handleRequestClose}>
-					<Menu>
-						<MenuItem primaryText="Delete" onClick={this.props.deleteSelectedUsers} />
-					</Menu>
-				</Popover>
-			</div>
+			<Toolbar>
+				<ToolbarGroup firstChild={true}>
+					<RaisedButton
+						label="Delete selected users"
+						primary={true}
+						onClick={this.handleDeleteUsers.bind(this)}
+						icon={<FontIcon className="muidocs-icon-custom-github" />}
+						disabled={!this.state.deleteUsersActive}
+					/>
+					<Dialog
+						open={this.state.confirmUserDeleteOpen}
+						actions={userDeleteActions}
+					>Delete selected users?</Dialog>
+					// <RaisedButton
+					// 	label="Add new user"
+					// 	primary={true}
+					// 	onClick={this.handleAddUser.bind(this)}
+					// 	icon={<FontIcon className="muidocs-icon-custom-github" />}
+					// />
+				</ToolbarGroup>
+			</Toolbar>
 		)
 	}
 }
 
 class UserList extends React.Component {
-
-	constructor(props) {
-		super(props)
-	}
 
 	render() {
 		return (
@@ -152,6 +211,18 @@ class UserList extends React.Component {
 		)
 	}
 
+}
+
+class UserForm extends React.Component {
+	render() {
+		return (
+			<form>
+				<TextField floatingLabelText="First name" />
+				<TextField floatingLabelText="Last name" />
+				<TextField floatingLabelText="Email" />
+			</form>
+		)
+	}
 }
 
 export default App
