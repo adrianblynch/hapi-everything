@@ -52,9 +52,10 @@ server.register(
 		{ register: require('hapi-swagger'), options: swaggerOptions },
 		{ register: require('blipp') },
 		{ register: require('hapi-mongodb'), options: mongoDbOptions },
-		{ register: require('good'), options: goodOptions},
-		{ register: require('./plugins/users'), options: {} },
-		{ register: require('./plugins/groups'), options: {} }
+		{ register: require('good'), options: goodOptions },
+		{ register: require('tv') },
+		{ register: require('./plugins/users') },
+		{ register: require('./plugins/groups') }
 	],
 	err => {
 		if (err) {

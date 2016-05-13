@@ -6,6 +6,7 @@ const request = require('request-promise')
 const uuid = require('node-uuid')
 
 const BASE_URL = 'http://localhost:3838'
+const DEBUG_PATH = '' // ?debug=gur675
 
 ////////////
 // Groups //
@@ -16,17 +17,17 @@ function makeGroup(group) {
 }
 
 function getGroups() {
-	return request({ url: `${BASE_URL}/groups`, json: true })
+	return request({ url: `${BASE_URL}/groups${DEBUG_PATH}`, json: true })
 }
 
 function getGroup(group) {
-	return request({ url: `${BASE_URL}/groups/${group.id}`, json: true })
+	return request({ url: `${BASE_URL}/groups/${group.id}${DEBUG_PATH}`, json: true })
 }
 
 function addGroup(group = makeGroup()) {
 	return request({
 		method: 'post',
-		url: `${BASE_URL}/groups`,
+		url: `${BASE_URL}/groups${DEBUG_PATH}`,
 		json: {
 			name: group.name,
 			parentId: group.parentId
@@ -37,7 +38,7 @@ function addGroup(group = makeGroup()) {
 function updateGroup(group) {
 	return request({
 		method: 'put',
-		url: `${BASE_URL}/groups/${group.id}`,
+		url: `${BASE_URL}/groups/${group.id}${DEBUG_PATH}`,
 		json: {
 			id: group.id,
 			name: group.name,
@@ -47,7 +48,7 @@ function updateGroup(group) {
 }
 
 function deleteGroup(group) {
-	return request({ method: 'delete', url: `${BASE_URL}/groups/${group.id}` })
+	return request({ method: 'delete', url: `${BASE_URL}/groups/${group.id}${DEBUG_PATH}` })
 }
 
 ///////////
@@ -66,17 +67,17 @@ function makeUser(user) {
 }
 
 function getUsers() {
-	return request({ url: `${BASE_URL}/users`, json: true })
+	return request({ url: `${BASE_URL}/users${DEBUG_PATH}`, json: true })
 }
 
 function getUser(user) {
-	return request({ url: `${BASE_URL}/users/${user.id}`, json: true })
+	return request({ url: `${BASE_URL}/users/${user.id}${DEBUG_PATH}`, json: true })
 }
 
 function addUser(user = makeUser()) {
 	return request({
 		method: 'post',
-		url: `${BASE_URL}/users`,
+		url: `${BASE_URL}/users${DEBUG_PATH}`,
 		json: {
 			firstName: user.firstName,
 			lastName: user.lastName,
@@ -88,7 +89,7 @@ function addUser(user = makeUser()) {
 function updateUser(user) {
 	return request({
 		method: 'put',
-		url: `${BASE_URL}/users/${user.id}`,
+		url: `${BASE_URL}/users/${user.id}${DEBUG_PATH}`,
 		json: {
 			id: user.id,
 			firstName: user.firstName,
@@ -99,7 +100,7 @@ function updateUser(user) {
 }
 
 function deleteUser(user) {
-	return request({ method: 'delete', url: `${BASE_URL}/users/${user.id}` })
+	return request({ method: 'delete', url: `${BASE_URL}/users/${user.id}${DEBUG_PATH}` })
 }
 
 module.exports = {
