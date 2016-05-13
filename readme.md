@@ -66,7 +66,23 @@ AVA comes bundled with Babel so I've jumped straight into using ES7 features, na
 
 - Run `npm run serve:react-mui` to start `webpack-dev-server` and [browse to here](http://localhost:3737/)
 
-### Incremental
+## Testing
+
+### API
+
+API tests are run using [AVA](https://github.com/sindresorhus/ava).
+
+The helper file [api.js](test/ava/helpers/api.js) makes requests to a running server. I thought about using [Hapi's `server.inject()`](http://hapijs.com/api#serverinjectoptions-callback), which I've used in the past, but I'm holding off on that to see if I miss it.
+
+### Web apps
+
+I'm a wannabe fan of [CodeceptJS](http://codecept.io/), I've yet to use it in anger, but I've liked what I've seen of it from the little I've used it.
+
+CodeceptJS is an abstruction over WebdriverIO, which itself sits on top of Selenium, a running version of which is needed to run the CJS tests.
+
+Note to self: `brew install selenium-server-standalone` and start with `selenium-server -p 4444`. The in `e2e` folder, `run codeceptjs run --steps`.
+
+## Incremental
 
 ~~Work on this for at least 30 minutes a day. No excuses!~~
 
