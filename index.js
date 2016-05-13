@@ -47,15 +47,15 @@ const swaggerOptions = { info: { 'title': 'Hapi Everything API Documentation' },
 
 server.register(
 	[
-		{ register: require('inert') },
-		{ register: require('vision') },
-		{ register: require('hapi-swagger'), options: swaggerOptions },
-		{ register: require('blipp') },
-		{ register: require('hapi-mongodb'), options: mongoDbOptions },
-		{ register: require('good'), options: goodOptions },
-		{ register: require('tv') },
-		{ register: require('./plugins/users') },
-		{ register: require('./plugins/groups') }
+		{ register: require('inert') }, // Serve static files
+		{ register: require('vision') }, // Template rendering
+		{ register: require('hapi-swagger'), options: swaggerOptions }, // Route documentation
+		{ register: require('blipp') }, // Route table display
+		{ register: require('hapi-mongodb'), options: mongoDbOptions }, // MongoDB connection sharing
+		{ register: require('good'), options: goodOptions }, // Server monitoring
+		{ register: require('tv') }, // Request debugging
+		{ register: require('./plugins/users') }, // User CRUD
+		{ register: require('./plugins/groups') } // Group CRUD
 	],
 	err => {
 		if (err) {

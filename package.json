@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js --ignore 'test/' --ignore 'apps/'",
-    "test": "ava test --verbose --timeout 3s",
+    "test": "ava test/ava --verbose --timeout 3s",
     "serve:react-mui": "webpack-dev-server --config './apps/react-mui/webpack.config.js'"
   },
   "repository": {
