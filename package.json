@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js --ignore 'test/' --ignore 'apps/'",
-    "test": "ava test/ava --verbose --timeout 3s",
+    "test": "npm run test:api && npm run test:e2e",
+    "test:api": "ava test/ava --verbose --timeout 3s",
+    "test:e2e": "codeceptjs run test/e2e --steps",
     "serve:react-mui": "webpack-dev-server --config './apps/react-mui/webpack.config.js'"
   },
   "repository": {

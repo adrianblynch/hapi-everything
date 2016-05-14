@@ -82,7 +82,10 @@ I'm a wannabe fan of [CodeceptJS](http://codecept.io/), I've yet to use it in an
 
 CodeceptJS is an abstruction over WebdriverIO, which itself sits on top of Selenium, a running version of which is needed to run the CJS tests.
 
-Note to self: `brew install selenium-server-standalone` and start with `selenium-server -p 4444`. The in `e2e` folder, `run codeceptjs run --steps`.
+Notes:
+
+- `brew install selenium-server-standalone` and start with `selenium-server -p 4444`. Then in `e2e` folder, `run codeceptjs run --steps`.
+- CodeceptJS, or maybe it's Webdriver(IO), doesn't complain if Selenium isn't started.
 
 ## Notes
 
