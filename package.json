@@ -27,6 +27,8 @@
   "dependencies": {
     "blipp": "^2.3.0",
     "boom": "^3.1.2",
+    "catbox": "^7.1.0",
+    "catbox-redis": "^1.0.10",
     "good": "^6.5.0",
     "good-console": "^5.3.1",
     "good-loggly": "^2.0.0",

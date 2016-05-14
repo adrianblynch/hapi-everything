@@ -3,12 +3,16 @@
 const Hapi = require('hapi')
 const Boom = require('boom')
 const uuid = require('node-uuid')
-
-// TODO: Catbox for caching
-
 const config = require('./config')
 
-const server = new Hapi.Server()
+const server = new Hapi.Server({
+    cache: {
+        engine: require('catbox-redis'),
+        name: 'catch-all',
+        database: 'hapi-everything',
+        shared: true
+    }
+})
 
 server.connection({
 	host: 'localhost',

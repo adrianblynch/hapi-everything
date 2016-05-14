@@ -19,6 +19,7 @@ To compare frontend libraries and frameworks acting on the same data.
 - Persistance to [MongoDB](https://www.mongodb.org/)
 - Relationships stored in [OrientDB](http://orientdb.com/)
 - Testing with [Ava](https://github.com/sindresorhus/ava)
+- TODO: Caching (and key-value storage) with [Redis](http://redis.io/) and [Catbox](https://github.com/hapijs/catbox)
 - TODO: [RethinkDB](https://www.rethinkdb.com/)
 
 ### Modular
@@ -57,6 +58,7 @@ AVA comes bundled with Babel so I've jumped straight into using ES7 features, na
 ### API
 - Fire up Mongo `mongod` (version 3.2.4)
 - Fire up OrientDB `cd path/to/orientdb/bin/` then `./server.sh` (version 2.1.16)
+- Fire up Redis `redis-server`
 - Run `npm start` to get the [API running here](http://localhost:3838/)
 - View [request debugging](http://localhost:3838/debug/console)
 
@@ -81,6 +83,17 @@ I'm a wannabe fan of [CodeceptJS](http://codecept.io/), I've yet to use it in an
 CodeceptJS is an abstruction over WebdriverIO, which itself sits on top of Selenium, a running version of which is needed to run the CJS tests.
 
 Note to self: `brew install selenium-server-standalone` and start with `selenium-server -p 4444`. The in `e2e` folder, `run codeceptjs run --steps`.
+
+## Notes
+
+### Redis cheatsheet
+
+- Install with `brew install redis`
+- Start with `redis-server`
+- The default port is 6379
+- Check Redis is running with `redis-cli ping` or simply `redis-cli`. The former doesn't drop you into the CLI, the latter does.
+- Stop Redis with `Ctrl + C`
+- Run `redis-cli INFO keyspace` to list "databases"
 
 ## Incremental
 
