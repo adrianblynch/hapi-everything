@@ -1,7 +1,7 @@
 'use strict'
 
 const Hapi = require('hapi')
-const Boom = require('boom')
+const boom = require('boom')
 const uuid = require('node-uuid')
 const config = require('./config')
 
@@ -76,19 +76,6 @@ server.register(
 	}
 )
 
-// Applications - Do we need a route per app? Prolly not.
-server.route([
-	{
-		path: '/apps/aurelia/{param*}',
-		method: ['get'],
-		handler: {
-			directory: {
-				path: 'apps/aurelia'
-			}
-		}
-	}
-])
-
 server.method('helpers', require('./plugins/helpers'));
 
 // TEMP: This whole route can go once the CRUD for users is in place, for now though:
@@ -98,7 +85,7 @@ server.route([
 		path: '/load',
 		config: {
 			handler: (request, reply) => {
-				return reply(Boom.notImplemented())
+				return reply(boom.notImplemented())
 				const col = request.server.plugins['hapi-mongodb'].db.collection('users')
 				const users = require('./users.json')
 				col.insertMany(users.map(user => {
