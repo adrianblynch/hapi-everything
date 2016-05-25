@@ -22,17 +22,17 @@ server.connection({
 	}
 })
 
-server.ext('onRequest', (request, reply) => {
-	const startTime = Date.now()
-	request.pre.requestStartTime = startTime
-	return reply.continue();
+server.ext('onRequest', function (request, reply) {
+	request.app.requestStartTime = Date.now()
+	reply.continue()
 })
 
 server.ext('onPreResponse', (request, reply) => {
-	const endTime = Date.now()
-	const responseTime = Math.ceil(endTime - request.pre.requestStartTime);
-	request.response.header('x-response-time', responseTime)
-	return reply.continue();
+	const responseTime = Math.ceil(Date.now() - request.app.requestStartTime)
+	if (request.response.header) { // This is not always available due to errors
+		request.response.header('x-response-time', responseTime)
+	}
+	reply.continue()
 })
 
 const goodOptions = {

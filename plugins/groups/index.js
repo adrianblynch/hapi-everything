@@ -94,4 +94,4 @@ exports.register = (server, options, next) => {
 exports.register.attributes = {
 	name: 'Groups',
 	version: '1.0.0'
-};
+}

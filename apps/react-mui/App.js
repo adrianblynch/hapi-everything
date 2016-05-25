@@ -111,7 +111,7 @@ class ConfirmUserDelete extends React.Component {
 				primary={true}
 				onTouchTap={this.onConfirm.bind(this)}
 			/>
-		];
+		]
 		return (
 			<Dialog
 				actions={actions}

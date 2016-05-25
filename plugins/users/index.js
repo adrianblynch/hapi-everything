@@ -2,6 +2,7 @@
 
 const Joi  = require('joi')
 const Boom = require('boom')
+const redis = require('redis')
 const User = require('../../lib/user')
 
 const baseUserSchema = {
@@ -9,6 +10,12 @@ const baseUserSchema = {
 	lastName: Joi.string().required(),
 	email: Joi.string().email().required()
 }
+const redisClient = redis.createClient()
+
+const ALL_USERS_KEY = 'allUsers'
+const ALL_USERS_TTL = 5
+
+redisClient.on('error', err => console.log('Redis error', err))
 
 exports.register = (server, options, next) => {
 
@@ -20,8 +27,45 @@ exports.register = (server, options, next) => {
 				method: 'get',
 				path: '/users',
 				config: {
+					// NOTE: Inline for now, just to check Redis/caching is working...
+					pre: [
+						(request, reply) => {
+							console.log(request.query)
+							if (!request.query.noCache) {
+								redisClient.get(ALL_USERS_KEY, (err, result) => {
+									if (err) {
+										console.log('Error looking for [users] in cache. Continue anyway...', err)
+									}
+									if (result) {
+										console.log('Found [users] in cache')
+										request.pre.users = result
+									} else {
+										console.log('No [users] found in cache')
+									}
+									reply()
+								})
+							} else {
+								reply()
+							}
+						}
+					],
 					handler: (request, reply) => {
-						reply(user.get())
+
+						if (request.pre.users) {
+							reply(JSON.parse(request.pre.users))
+						} else {
+							user.get()
+								.then(users => {
+									reply(users)
+									return users
+								})
+								.then(users => {
+									console.log('Adding [users] to cache')
+									redisClient.set(ALL_USERS_KEY, JSON.stringify(users))
+									redisClient.expire(ALL_USERS_KEY, ALL_USERS_TTL)
+								})
+						}
+
 					},
 					tags: ['api']
 				}
