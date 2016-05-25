@@ -22,6 +22,19 @@ server.connection({
 	}
 })
 
+server.ext('onRequest', (request, reply) => {
+	const startTime = Date.now()
+	request.pre.requestStartTime = startTime
+	return reply.continue();
+})
+
+server.ext('onPreResponse', (request, reply) => {
+	const endTime = Date.now()
+	const responseTime = Math.ceil(endTime - request.pre.requestStartTime);
+	request.response.header('x-response-time', responseTime)
+	return reply.continue();
+})
+
 const goodOptions = {
 	reporters: [
 		{
@@ -54,7 +67,7 @@ server.register(
 		{ register: require('inert') }, // Serve static files
 		{ register: require('vision') }, // Template rendering
 		{ register: require('hapi-swagger'), options: swaggerOptions }, // Route documentation
-		{ register: require('blipp') }, // Route table display
+		{ register: require('blipp') }, // Display route table on start
 		{ register: require('hapi-mongodb'), options: mongoDbOptions }, // MongoDB connection sharing
 		{ register: require('good'), options: goodOptions }, // Server monitoring
 		{ register: require('tv') }, // Request debugging

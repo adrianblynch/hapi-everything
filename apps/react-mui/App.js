@@ -172,12 +172,12 @@ class ActionsBar extends React.Component {
 						open={this.state.confirmUserDeleteOpen}
 						actions={userDeleteActions}
 					>Delete selected users?</Dialog>
-					// <RaisedButton
-					// 	label="Add new user"
-					// 	primary={true}
-					// 	onClick={this.handleAddUser.bind(this)}
-					// 	icon={<FontIcon className="muidocs-icon-custom-github" />}
-					// />
+					<RaisedButton
+						label="Add new user"
+						primary={true}
+						onClick={this.handleAddUser.bind(this)}
+						icon={<FontIcon className="muidocs-icon-custom-github" />}
+					/>
 				</ToolbarGroup>
 			</Toolbar>
 		)
