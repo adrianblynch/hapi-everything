@@ -8,7 +8,9 @@
     "test": "npm run test:api && npm run test:e2e",
     "test:api": "ava test/ava --verbose --timeout 3s",
     "test:e2e": "codeceptjs run test/e2e --steps",
-    "serve:react-mui": "webpack-dev-server --config './apps/react-mui/webpack.config.js'"
+    "serve:react-mui": "webpack-dev-server --config './apps/react-mui/webpack.config.js'",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -45,7 +47,8 @@
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-tap-event-plugin": "^1.0.0",
-    "vision": "^4.0.1"
+    "vision": "^4.0.1",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "ava": "^0.14.0",
@@ -56,5 +59,6 @@
     "request-promise": "^3.0.0",
     "tv": "^5.0.2",
     "webpack": "^1.13.0"
-  }
+  },
+  "snyk": true
 }
