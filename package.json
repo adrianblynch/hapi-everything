@@ -41,7 +41,7 @@
     "joi": "^7.2.3",
     "material-ui": "^0.15.0",
     "node-uuid": "^1.4.7",
-    "orientjs": "^2.2.0-beta2",
+    "orientjs": "^3.0.0",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-tap-event-plugin": "^1.0.0",
