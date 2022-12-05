@@ -33,7 +33,7 @@
     "catbox-redis": "^1.0.10",
     "good": "^6.5.0",
     "good-console": "^5.3.1",
-    "good-loggly": "^2.0.0",
+    "good-loggly": "^3.0.0",
     "hapi": "^12.1.0",
     "hapi-mongodb": "^5.0.0",
     "hapi-swagger": "^4.0.0",
